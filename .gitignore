@@ -1,0 +1,8 @@
+distributed_node/.project
+distributed_node/.classpath
+distributed_node/.settings
+distributed_node/.idea
+distributed_node/target
+distributed_node/distributed_node.iml
+Bootstrap Server/BootstrapServer.class
+Bootstrap Server/Neighbour.class
