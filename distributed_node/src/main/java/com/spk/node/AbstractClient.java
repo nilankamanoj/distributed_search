@@ -382,9 +382,10 @@ public abstract class AbstractClient {
         }
 
         hops++;
+        log("=================>"+String.valueOf(hops));
         if (hops < 15) {
             for (Node node : knownNodes) {
-                String search_msg = "SER " + uuid + " " + ip + " " + port + " " + "\"" + searchQuery + "\"" + " " + hops;
+                String search_msg =  CommandOpCodes.SEARCH + " "+ uuid + " " + ip + " " + port + " " + "\"" + searchQuery + "\"" + " " + hops;
                 send(search_msg, node);
             }
         }
