@@ -24,6 +24,7 @@ public abstract class AbstractClient {
     protected String username;
     protected volatile boolean running;
     protected ArrayList<Node> knownNodes;
+    protected int msgCount;
 
     HashMap<String, Long> passedQueries = new HashMap<>();
     HashMap<String, List<String>> queryResults = new HashMap<>();
@@ -143,10 +144,12 @@ public abstract class AbstractClient {
             if (command.equals(CommandOpCodes.JOIN)) {
                 return join(tokenizer);
             } else if (command.equals(CommandOpCodes.SEARCH)) {
+                msgCount ++;
                 return search(tokenizer);
             } else if (command.equals(CommandOpCodes.LEAVE)) {
                 return leave(tokenizer);
             } else if (command.equals(CommandOpCodes.SEARCH_OK)) {
+                msgCount ++;
                 return processSearchResult(tokenizer);
             } else if (command.equals(CommandOpCodes.ALIVE)) {
                 return processHeartBeat(tokenizer);
@@ -382,7 +385,7 @@ public abstract class AbstractClient {
         }
 
         hops++;
-        log("=================>"+String.valueOf(hops));
+        log("hops count =================>"+String.valueOf(hops));
         if (hops < 15) {
             for (Node node : knownNodes) {
                 String search_msg =  CommandOpCodes.SEARCH + " "+ uuid + " " + ip + " " + port + " " + "\"" + searchQuery + "\"" + " " + hops;

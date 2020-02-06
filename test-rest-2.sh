@@ -22,6 +22,6 @@ gnome-terminal --window -- java -cp distributed-node-1.0-SNAPSHOT-jar-with-depen
 gnome-terminal --window -- java -cp distributed-node-1.0-SNAPSHOT-jar-with-dependencies.jar com.spk.node.Main localhost 55555 localhost 10017 9017 spk2 REST
 gnome-terminal --window -- java -cp distributed-node-1.0-SNAPSHOT-jar-with-dependencies.jar com.spk.node.Main localhost 55555 localhost 10018 9018 spk3 REST
 gnome-terminal --window -- java -cp distributed-node-1.0-SNAPSHOT-jar-with-dependencies.jar com.spk.node.Main localhost 55555 localhost 10019 9019 spk4 REST
-gnome-terminal --window -- java -cp distributed-node-1.0-SNAPSHOT-jar-with-dependencies.jar com.spk.node.Main localhost 55555 localhost 1020 9020 spk5 REST
+gnome-terminal --window -- java -cp distributed-node-1.0-SNAPSHOT-jar-with-dependencies.jar com.spk.node.Main localhost 55555 localhost 10020 9020 spk5 REST
 cd ../../dashboard
 firefox index.html?n=20

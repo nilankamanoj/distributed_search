@@ -74,6 +74,8 @@ public class RestClient extends AbstractClient {
                     reply+= m.getKey() +"\n";
                 }
 
+                reply+= "\nMsg count(search): "+msgCount+"\n";
+
 
                 reply += "\nSearch Results:\n";
                 for(Map.Entry m:queryResults.entrySet()){

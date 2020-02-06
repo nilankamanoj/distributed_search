@@ -36,6 +36,7 @@ public class UdpClient extends AbstractClient {
                         byte[] data = incomingPacket.getData();
                         String s = new String(data, 0, incomingPacket.getLength());
                         String reply = parseMessage(s);
+                        log("message count(search) =============>"+String.valueOf(msgCount));
                         if (reply != null)
                             synchronized (knownNodes) {
                                 send(reply, new Node(incomingPacket.getAddress().toString().substring(1), incomingPacket.getPort()));
