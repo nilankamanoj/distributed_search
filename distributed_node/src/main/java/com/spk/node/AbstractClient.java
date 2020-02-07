@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.InetAddress;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.UUID;
@@ -25,6 +27,7 @@ public abstract class AbstractClient {
     protected volatile boolean running;
     protected ArrayList<Node> knownNodes;
     protected int msgCount;
+    protected Instant start;
 
     HashMap<String, Long> passedQueries = new HashMap<>();
     HashMap<String, List<String>> queryResults = new HashMap<>();
@@ -144,12 +147,19 @@ public abstract class AbstractClient {
             if (command.equals(CommandOpCodes.JOIN)) {
                 return join(tokenizer);
             } else if (command.equals(CommandOpCodes.SEARCH)) {
+                if(this instanceof UdpClient){
+                    start = Instant.now();
+                }
                 msgCount ++;
                 return search(tokenizer);
             } else if (command.equals(CommandOpCodes.LEAVE)) {
                 return leave(tokenizer);
             } else if (command.equals(CommandOpCodes.SEARCH_OK)) {
                 msgCount ++;
+                Instant end = Instant.now();
+                long timeElapsed = Duration.between(start, end).toMillis();
+                log("message count(search) =============>"+String.valueOf(msgCount));
+                log("latency ===============|>" + timeElapsed);
                 return processSearchResult(tokenizer);
             } else if (command.equals(CommandOpCodes.ALIVE)) {
                 return processHeartBeat(tokenizer);
@@ -350,7 +360,7 @@ public abstract class AbstractClient {
         int hops = Integer.parseInt(st.nextToken());
         String searchQuery = query.substring(1, query.length());
 
-        SearchQuery q = new SearchQuery(new Node(ip, port), searchQuery, uuid);
+        SearchQuery query1 = new SearchQuery(new Node(ip, port), searchQuery, uuid);
         Long millis = System.currentTimeMillis();
 
 
@@ -360,13 +370,13 @@ public abstract class AbstractClient {
                 it.remove();
             }
         }
-        if (passedQueries.containsKey(q.getHash()))
+        if (passedQueries.containsKey(query1.getHash()))
             return null;
-        passedQueries.put(q.getHash(), millis);
+        passedQueries.put(query1.getHash(), millis);
 
         List<String> results = search(searchQuery);
 
-        String reply = CommandOpCodes.SEARCH_OK + " " + q.getHash() + " " + this.ip + " " + this.receivePort + " ";
+        String reply = CommandOpCodes.SEARCH_OK + " " + query1.getHash() + " " + this.ip + " " + this.receivePort + " ";
         if (results.isEmpty()) {
             reply += "0";
             isOkay = true;

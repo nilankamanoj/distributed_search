@@ -3,6 +3,7 @@ package com.spk.node;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -19,9 +20,9 @@ public class RestClient extends AbstractClient {
     private final String USER_AGENT = "Mozilla/5.0";
 
     private RestClient(String[] args) {
-        String bs_ip = args[0];
-        int bs_port = Integer.valueOf(args[1]);
-        this.bs = new Node(bs_ip, bs_port);
+        String bsIp = args[0];
+        int bsPort = Integer.valueOf(args[1]);
+        this.bs = new Node(bsIp, bsPort);
         this.ip = args[2];
         this.receivePort = Integer.valueOf(args[3]);
         this.sendPort = Integer.valueOf(args[4]);
@@ -94,6 +95,7 @@ public class RestClient extends AbstractClient {
         post("/search/:q", new Route() {
             @Override
             public Object handle(Request request, Response response) {
+                start = Instant.now();
                 try {
                     String q = request.params(":q");
                     q = URLDecoder.decode(q, "UTF-8");
